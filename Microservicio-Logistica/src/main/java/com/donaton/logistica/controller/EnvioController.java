@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/logistica")
-@CrossOrigin(origins = "http://localhost:5174")
+@CrossOrigin(origins = "*")
 public class EnvioController {
 
     private final EnvioService service;
