@@ -3,6 +3,8 @@ package com.donaton.logistica.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "envios")
 @Data
@@ -13,9 +15,15 @@ public class Envio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Long necesidadId;
+
+    private String categoria;
+
+    private Integer cantidadDespachada;
+
     private String destino;
-    private String descripcionAyuda;
-    private String estado;
-    private String transporte;
-    private int cantidad;
+
+    private LocalDate fecha;
+
 }

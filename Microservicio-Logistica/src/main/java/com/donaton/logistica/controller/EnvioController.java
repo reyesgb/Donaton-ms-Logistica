@@ -1,11 +1,13 @@
 package com.donaton.logistica.controller;
 
+import com.donaton.logistica.dto.DespachoDTO;
 import com.donaton.logistica.dto.EnvioDTO;
 import com.donaton.logistica.model.Envio;
 import com.donaton.logistica.service.EnvioService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -24,10 +26,11 @@ public class EnvioController {
 
         Envio envio = new Envio();
 
+        envio.setNecesidadId(dto.getNecesidadId());
+        envio.setCategoria(dto.getCategoria());
+        envio.setCantidadDespachada(dto.getCantidadDespachada());
         envio.setDestino(dto.getDestino());
-        envio.setEstado(dto.getEstado());
-        envio.setTransporte(dto.getTransporte());
-        envio.setCantidad(dto.getCantidad());
+        envio.setFecha(LocalDate.now());
 
         return service.guardar(envio);
     }
@@ -36,4 +39,5 @@ public class EnvioController {
     public List<Envio> listar() {
         return service.listar();
     }
+
 }

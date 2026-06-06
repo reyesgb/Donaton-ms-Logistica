@@ -1,5 +1,6 @@
 package com.donaton.logistica.service;
 
+import com.donaton.logistica.dto.DespachoDTO;
 import com.donaton.logistica.model.Envio;
 import com.donaton.logistica.repository.EnvioRepository;
 import org.springframework.stereotype.Service;
@@ -22,4 +23,5 @@ public class EnvioService {
     public List<Envio> listar() {
         return repository.findAll();
     }
+
 }

@@ -2,20 +2,21 @@ package com.donaton.logistica.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class EnvioDTO {
 
-    @NotBlank
-    private String destino;
+    @NotNull
+    private Long necesidadId;
 
     @NotBlank
-    private String estado;
-
-    @NotBlank
-    private String transporte;
+    private String categoria;
 
     @Min(1)
-    private int cantidad;
+    private Integer cantidadDespachada;
+
+    @NotBlank
+    private String destino;
 }
