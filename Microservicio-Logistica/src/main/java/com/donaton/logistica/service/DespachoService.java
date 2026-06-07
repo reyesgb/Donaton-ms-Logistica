@@ -1,5 +1,6 @@
 package com.donaton.logistica.service;
 
+import com.donaton.logistica.dto.DespachoDTO;
 import com.donaton.logistica.dto.NecesidadDTO;
 import com.donaton.logistica.model.Envio;
 import com.donaton.logistica.model.Recurso;
@@ -26,52 +27,51 @@ public class DespachoService {
         this.necesidadClient = necesidadClient;
     }
 
-    public Envio despachar(
-            NecesidadDTO necesidad
-    ) {
+    public Envio despachar(DespachoDTO despacho) {
 
-        Recurso stock = recursoService
-                .buscarPorCategoria(
-                        necesidad.getCategoria()
-                );
+        // 1. Evitamos problemas de mayúsculas/minúsculas de la categoría que viene del front
+        String categoriaNormalizada = despacho.getCategoria().toUpperCase().trim();
+        System.out.println("Categoria normalizada recibida: " + categoriaNormalizada);
+
+        // 2. Buscamos el stock en la BD de Logística usando la categoría en mayúsculas
+        Recurso stock = recursoService.buscarPorCategoria(categoriaNormalizada);
 
         if (stock == null) {
             throw new RuntimeException(
-                    "No existe stock para esta categoría"
+                    "No existe stock para la categoría: " + categoriaNormalizada
             );
         }
 
-        if (
-                stock.getCantidadDisponible()
-                        < necesidad.getCantidadNecesaria()
-        ) {
-
+        // 3. Validamos usando la cantidad del DTO (Integer)
+        if (stock.getCantidadDisponible() < despacho.getCantidad()) {
             throw new RuntimeException(
-                    "Stock insuficiente"
+                    "Stock insuficiente para " + categoriaNormalizada
             );
         }
 
+        // 4. Descontamos el stock
         recursoService.descontarStock(
-                necesidad.getCategoria(),
-                necesidad.getCantidadNecesaria()
+                categoriaNormalizada,
+                despacho.getCantidad()
         );
 
+        // 5. Creamos el registro del Envío/Despacho para la base de datos
         Envio envio = new Envio();
 
         envio.setNecesidadId(
-                necesidad.getId()
+                despacho.getNecesidadId() // Usamos el nombre exacto de tu DTO
         );
 
         envio.setCategoria(
-                necesidad.getCategoria()
+                categoriaNormalizada
         );
 
         envio.setCantidadDespachada(
-                necesidad.getCantidadNecesaria()
+                despacho.getCantidad()
         );
 
         envio.setDestino(
-                necesidad.getComuna()
+                despacho.getDestino()
         );
 
         envio.setFecha(
@@ -80,13 +80,15 @@ public class DespachoService {
 
         envio = envioService.guardar(envio);
 
-        necesidadClient.completarNecesidad(
-                necesidad.getId()
-        );
+        // 6. Notificamos al microservicio de Necesidades
+        if (despacho.getNecesidadId() != null) {
+            necesidadClient.completarNecesidad(
+                    despacho.getNecesidadId()
+            );
+        }
 
         return envio;
     }
-
     public List<Envio> listar(){
     return envioService.listar();}
 

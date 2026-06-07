@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface RecursoRepository extends JpaRepository<Recurso, Long> {
 
-    Optional<Recurso> findByCategoria(String categoria);
+    Optional<Recurso> findByCategoriaIgnoreCase(String categoria);
 }

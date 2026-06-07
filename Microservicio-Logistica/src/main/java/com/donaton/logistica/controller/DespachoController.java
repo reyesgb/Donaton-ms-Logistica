@@ -1,5 +1,6 @@
 package com.donaton.logistica.controller;
 
+import com.donaton.logistica.dto.DespachoDTO;
 import com.donaton.logistica.dto.NecesidadDTO;
 import com.donaton.logistica.model.Envio;
 import com.donaton.logistica.service.DespachoService;
@@ -22,11 +23,10 @@ public class DespachoController {
 
     @PostMapping
     public Envio despachar(
-            @RequestBody NecesidadDTO necesidad
+            @RequestBody DespachoDTO despachoDTO
     ) {
-        return service.despachar(necesidad);
+        return service.despachar(despachoDTO);
     }
-
     @GetMapping
     public List<Envio> listar() {
         return service.listar();

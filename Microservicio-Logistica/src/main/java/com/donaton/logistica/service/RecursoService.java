@@ -18,7 +18,7 @@ public class RecursoService {
     public Recurso agregarStock(String categoria, Integer cantidad) {
 
         Recurso recurso = repository
-                .findByCategoria(categoria)
+                .findByCategoriaIgnoreCase(categoria)
                 .orElse(new Recurso());
 
         recurso.setCategoria(categoria);
@@ -40,7 +40,7 @@ public class RecursoService {
     ) {
 
         Recurso recurso = repository
-                .findByCategoria(categoria)
+                .findByCategoriaIgnoreCase(categoria)
                 .orElseThrow(() ->
                         new RuntimeException("No existe stock para la categoria"));
 
@@ -60,7 +60,8 @@ public class RecursoService {
             String categoria
     ) {
 
-        return repository.findByCategoria(categoria)
+        return repository
+                .findByCategoriaIgnoreCase(categoria)
                 .orElse(null);
     }
 
