@@ -2,7 +2,9 @@
 FROM eclipse-temurin:17-jdk-alpine
 
 # 2. Hazle un agujerito a la caja en el puerto 8080 para poder jugar con él
-EXPOSE 8082
+EXPOSE 8080
+
+COPY Wallet_donatonBD /app/wallet
 
 # 3. Agarra mi castillo (el archivo .jar) y mételo a la caja con el nombre "app.jar"
 COPY target/*.jar app.jar
